@@ -1,0 +1,27 @@
+{
+    "contact": {
+        "firstName": "Faram",
+        "lastName": "Faram",
+        "address": "Italy",
+        "city": "Italy",
+        "email": "test@test.com",
+        "products": [
+            {
+                "productID": "415b7cacb65d43b2b5c1ff70f3393ad1",
+                "selectedPrice": "4499",
+                "selectedColor": "Black/Yellow",
+                "selectedQuantity": "2",
+                "name": "Kanap Cyllène",
+                "imageUrl": "http://127.0.0.1:3000/images/kanap02.jpeg"
+            },
+            {
+                "productID": "a557292fe5814ea2b15c6ef4bd73ed83",
+                "selectedPrice": "1499",
+                "selectedColor": "Pink",
+                "selectedQuantity": "5",
+                "name": "Kanap Autonoé",
+                "imageUrl": "http://127.0.0.1:3000/images/kanap04.jpeg"
+            }
+        ]
+    }
+}

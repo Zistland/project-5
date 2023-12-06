@@ -18,7 +18,7 @@ async function fetchProductList() {
         //  </article>
         //</a> -->
         const anchor = document.createElement('a');
-        anchor.href = '/'
+        anchor.href = `./product.html?id=${productObject._id}&name=${productObject.name}&imgSrc=${productObject.imageUrl}`
         const article = document.createElement('article');
         const img = document.createElement('img');
         img.src = productObject.imageUrl;
@@ -27,19 +27,26 @@ async function fetchProductList() {
         const h3 = document.createElement('h3');
         h3.innerText = productObject.name;
 
+        // TODO: ADD A PARGRAPH
+        const parag  = document.createElement('p');
+        parag.innerHTML = productObject.description;
+
         article.appendChild(h3);
         article.appendChild(img);
+        article.appendChild(parag);
 
-        // TODO: ADD A PARGRAPH
-
-
+        anchor.appendChild(article);
+        
+        
+        
         // FINAL BATCH
-        itemListHTML.appendChild(article)
+        itemListHTML.appendChild(anchor)
+    
+
+    });
+  }
 
 
-
-    })
-}
 
 const prodList = fetchProductList();
 
@@ -48,4 +55,13 @@ prodList.forEach((productObject) => {
 })
 
 
-// Step4: attach to the products HTML ELement
+// Step4: attach to the products HTML ELement;
+
+
+
+
+
+
+
+
+

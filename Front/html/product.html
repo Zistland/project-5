@@ -33,8 +33,8 @@
           </a>
           <nav>
             <ul>
-              <a href="./index.html"><li>Home</li></a>
-              <a href="./cart.html"><li>Cart</li></a>
+             <li><a href="./index.html">Home</a></li>
+              <li><a href="./cart.html">Cart</a></li>
             </ul>
           </nav>
         </div>
@@ -46,14 +46,14 @@
       <div class="limitedWidthBlock">
         <section class="item">
           <article>
-            <div class="item__img">
-              <!-- <img src="../images/logo.png" alt="Photo of a sofa"> -->
+            <div id="item__img">
+             <!-- <img src="../images/logo.png" alt="Photo of a sofa"> -->  
             </div>
             <div class="item__content">
 
               <div class="item__content__titlePrice">
                 <h1 id="title"><!-- Product name --></h1>
-                <p>Prix : <span id="price"><!-- 42 --></span>€</p>
+                <p>Prix : <span id="price"></span>€</p>
               </div>
 
               <div class="item__content__description">
@@ -63,8 +63,8 @@
 
               <div class="item__content__settings">
                 <div class="item__content__settings__color">
-                  <label for="color-select">Chose your color:</label>
-                  <select name="color-select" id="colors">
+                  <label for="color-select">Choose your color:</label>
+                  <select id="color-select" name="colors">
                       <option value="">--Please, select a color --</option>
 <!--                       <option value="vert">green</option>
                       <option value="blanc">white</option> -->
@@ -73,12 +73,15 @@
 
                 <div class="item__content__settings__quantity">
                   <label for="itemQuantity">Number of articles (1-100):</label>
-                  <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
+                  <input type="number" id="itemQuantity" min="1" max="100" value="0" name="quantity">
                 </div>
               </div>
 
-              <div class="item__content__addButton">
-                <button id="addToCart">Add to cart</button>
+              <div class="item__content__addButton" >
+                <button id="addToCart" >Add to cart </button>
+              </div>
+
+              <div class="item__content__addButton" id="item__content">
               </div>
 
             </div>
@@ -106,10 +109,15 @@
       </div>
       <div class="limitedWidthBlockContainer footerSecondary">
         <div class="limitedWidthBlock">
-          <p>© Copyright 2021 - 2042 | Openclassrooms by Openclassrooms | All Rights Reserved | Powered by <3</p>
+          <p>© Copyright 2021 - 2042 | Openclassrooms by Openclassrooms | All Rights Reserved | Powered by </p>
         </div>
       </div>
     </footer>
   <script src="../js/product.js"></script>
   </body>
 </html>
+
+
+
+
+
