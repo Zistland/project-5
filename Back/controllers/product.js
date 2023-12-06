@@ -59,6 +59,7 @@ exports.orderProducts = (req, res, next) => {
   }
   let queries = [];
   console.log("TEST")
+  // req > body > products [ id, id2, id3]
   for (let productId of req.body.products) {
     const queryPromise = new Promise((resolve, reject) => {
       Product.findById(productId).then(
@@ -76,6 +77,7 @@ exports.orderProducts = (req, res, next) => {
       )
     });
     queries.push(queryPromise);
+    console.log(queries)
   }
   Promise.all(queries).then(
     (products) => {
@@ -88,6 +90,7 @@ exports.orderProducts = (req, res, next) => {
     }
   ).catch(
     (error) => {
+      console.log('500', error)
       return res.status(500).json(new Error(error));
     }
   );

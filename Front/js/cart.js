@@ -300,6 +300,35 @@ const submitBtn = document.getElementById('order').addEventListener('click', (ev
 
 
 
+  fetch(`http://127.0.0.1:3000/api/products/order`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "contact": {
+        "firstName": "Faram",
+        "lastName": "Faram",
+        "address": "Italy",
+        "city": "Italy",
+        "email": "test@test.com"
+      },
+      "products": [
+        "415b7cacb65d43b2b5c1ff70f3393ad1",
+        "a557292fe5814ea2b15c6ef4bd73ed83"
+      ]
+    })
+  }).then(data => {
+    if (data.status >= 200) {
+      data.body.then(data=>{
+        console.log('TEST: ', JSON.parse(data))
+
+      })
+      //window.location.href = `confirmation.html?orderId=${data.body.orderId}`
+    }
+  });
+
+
 
 
 })
