@@ -17,6 +17,54 @@ function extractValue(event) {
   console.log("My changed value: ", event.currentTarget.value)
 }
 
+function onTimeout(callback) {
+  setTimeout(() => {
+    callback(true);
+  }, 2000);
+}
+
+function destroyErrorBanner() {
+  const errorBanner = document.getElementById('error-banner');
+  errorBanner.parentNode().removeChild(errorBanner);
+}
+
+function displayError(errorCode) {
+
+  let errorMessage = '';
+ 
+  // Define error messages for different status codes
+  const errorMessages = {
+    400: 'Product Not Found',
+    500: 'Internal Server Error:Contact Support for Help',
+
+  };
+
+  let statusCodeRetrieve = 500;
+
+  if (errorCode >= 400 && errorCode < 500) {
+    statusCodeRetrieve = 400;
+  } else if (errorCode >= 500) {
+    statusCodeRetrieve = 500;
+  }
+  console.log(errorCode, statusCodeRetrieve)
+  // Check if the provided status code has a corresponding message
+
+  errorMessage = errorCode + ' ' + errorMessages[statusCodeRetrieve];
+
+  // Create a new div element
+  const errorContainer = document.getElementById('serverErrorMessage');
+  errorContainer.innerText = errorMessage;
+  errorContainer.style.display = 'block';
+
+
+
+  // Append the error container to the body
+  onTimeout(() => {
+    errorContainer.innerText = '';
+    errorContainer.style.display = 'none';
+  })
+}
+
 const value = extractValue || extract
 
 document.getElementById('firstName').addEventListener('change', extractValue)
@@ -76,7 +124,6 @@ try {
 
 
 cart = getCartFromStorage()
-
 
 
 function displayCartProducts() {
@@ -183,6 +230,9 @@ function displayCartProducts() {
     deleteSpan.innerText = 'Delete';
     deleteSpan.addEventListener('click', () => {
       console.log('delete: ', product.name);
+      const totalPrice = document.getElementById('totalPrice');
+      totalPrice.textContent = cartTotal;
+
 
     })
 
@@ -199,30 +249,6 @@ function displayCartProducts() {
     const articleListSection = document.getElementById('cart__items');
 
     articleListSection.appendChild(articleItem)
-
-
-
-    /* <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
-                <div class="cart__item__img">
-                  <img src="../images/product01.jpg" alt="Photo of a sofa">
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>Name of the product</h2>
-                    <p>Green</p>
-                    <p>€42.00</p>
-                  </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                      <p>Quantity : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                      <span class="deleteItem js-delete-link" >Delete</span>
-                    </div>
-                  </div>
-                </div>
-              </article> */
 
 
 
@@ -280,59 +306,148 @@ console.log(cart, cartQuantity, cartQuantity);
 </div>
 </article>-->*/
 
-const submitBtn = document.getElementById('order').addEventListener('click', (ev) => {
+function getData(form) {
+  let formData = new FormData(form);
+
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ": " + pair[1]);
+  }
+
+  console.log(Object.fromEntries(formData));
+  return Object.fromEntries(formData);
+}
+
+
+const submitBtn = document.getElementById('cart__order__form').addEventListener('submit', (ev) => {
   // Your data object
   ev.preventDefault();
-  const firstName = document.getElementById('firstName').innerText;
-  console.log("FIRST NAME: ", firstName)
 
-  const lastName = document.getElementById('lastName').innerText;
-  console.log("LAST NAME: ", lastName)
-
-  const address = document.getElementById('address').innerText;
-  console.log("ADDRESS: ", address)
-
-  const city = document.getElementById('city').innerText;
-  console.log("CITY: ", city)
-
-  const email = document.getElementById('email').innerText;
-  console.log("EMAIL: ", email)
+  const formData = getData(ev.currentTarget);
+  console.log("formData:", formData)
+  
+  const formErrMessageList = Object.keys(formData).reduce((acc, formKey) => {
 
 
+    if (formKey === 'name' && formData[formKey].length < 4) {
+      return { ...acc, [formKey]: `${formKey} must have more than 4 characters` };
+    } else if (formKey === 'email' && (!formData[formKey].includes('@') || !formData[formKey].includes('.com'))) {
+      return { ...acc, [formKey]: 'invalid email address' };
+    }
 
+
+    // Add more conditions for other fields as needed
+    return acc; 
+  }, {});
+  
+  
+  console.log(formErrMessageList)
+  // text fields validation
+  /// email validation
+  Object.keys(formErrMessageList).forEach(formKey => {
+    const errorParagraph = document.getElementById(`${formKey}ErrorMsg`)
+    errorParagraph.innerText = formErrMessageList[formKey]
+  });
+
+
+  // 
+
+  // TODO: if email is not valid : show meaningful errors to the right InputDeviceInfo
+
+  // TODO: else if form is valid make server requqest
+
+
+
+
+
+  const getActivity = async () => {
+    let jsonData = await activitiesActions.checkUserHosting(theEmail);
+    //now you can directly use jsonData
+
+
+  }
+  //TODO: fix this back
   fetch(`http://127.0.0.1:3000/api/products/order`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      "contact": {
-        "firstName": "Faram",
-        "lastName": "Faram",
-        "address": "Italy",
-        "city": "Italy",
-        "email": "test@test.com"
-      },
-      "products": [
-        "415b7cacb65d43b2b5c1ff70f3393ad1",
-        "a557292fe5814ea2b15c6ef4bd73ed83"
-      ]
-    })
-  }).then(data => {
-    if (data.status >= 200) {
-      data.body.then(data=>{
-        console.log('TEST: ', JSON.parse(data))
+      "contact": formData,
+      "products": cart.map(product => product.productID)
 
-      })
-      //window.location.href = `confirmation.html?orderId=${data.body.orderId}`
+    })
+
+  }).then(data => {
+
+    console.log(data)
+
+    // SUCCESFUL RESPONSE _ ORDER DONE ON SERVER
+
+    if (data.status >= 200 && data.status <= 300) {
+
+      return data.json()
+
     }
+
+
+    // unsuccessful response
+    else {
+      if (data.status >= 400 && data.status <= 500) {
+        displayError(data.status)
+        //  onTimeout(destroyErrorBanner())
+      }
+
+
+      // Create a link with a URI parameter
+       //const confirmation = document.getElementsByClassName('confirmation');
+      // const orderId = document.getElementById('orderId');
+       // orderId.innerHTML = 'orderId';
+       // const link = document.createElement('a');
+       // link.href = `confirmation.html?orderId=${data.body.orderId}`;
+       // link.textContent = 'Go to confrirmation Page';
+
+      // Append the link to the body (or any other element you want)
+       //document.body.appendChild(link); 
+
+
+
+      // Unsuccessful response - handle the error
+
+
+
+
+
+
+
+      // TODO: diplay error & a message
+      // data.status >=400 && <500 NOT FOUND, could not find the product selection
+      //data.status  >=500 -> server error: contact support for help
+
+      const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
+      const newParagraph = document.createElement('p');
+      newParagraph.textContent = 'new content';
+
+      firstNameErrorMsg.innerText = '';
+
+      document.getElementById('order').addEventListener("submit", () => {
+        if (firstNameInput.checkValidity()) {
+          console.log('Form can be submitted!');
+        }
+      })
+
+    }
+  }).then(jsonData => {
+    console.log(jsonData)
+
+
+  
+ 
+  
+    
+   //window.location.href = `confirmation.html?orderId= ${jsonData.orderId}'
   });
 
-
-
-
 })
-
 
 
 
@@ -362,4 +477,33 @@ function removeFromcart() {
   cart = newCart;
 }
 
+// confirmation page
+const postRequest = (orderData) => {
 
+}
+
+
+
+
+
+
+
+//postRequest();
+
+// Define the validateAndSubmit function
+function validateAndSubmit() {
+  // Your validation logic here
+  // For demonstration purposes, assume the form is valid
+  let formIsValid =true;
+
+  if (formIsValid) {
+    // Redirect to the confirmation page
+
+    window.location.href = 'confirmation.html?orderId=fd8f7d40-9bfb-11ee-8657-63c8872c941c';
+    const orderId = url.searchParams.get('orderId');
+    return orderId;
+  } else {
+    // Handle invalid form case, show error messages, etc.
+    console.log('Form is not valid. Please check input fields.');
+  }
+}
