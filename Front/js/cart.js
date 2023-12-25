@@ -232,8 +232,7 @@ function displayCartProducts() {
       console.log('delete: ', product.name);
       const totalPrice = document.getElementById('totalPrice');
       totalPrice.textContent = cartTotal;
-
-
+     
     })
 
 
@@ -445,11 +444,12 @@ const submitBtn = document.getElementById('cart__order__form').addEventListener(
   
     
    //window.location.href = `confirmation.html?orderId= ${jsonData.orderId}'
+
+
   });
 
+
 })
-
-
 
 
 document.querySelectorAll('.js-delete-link')
@@ -485,25 +485,12 @@ const postRequest = (orderData) => {
 
 
 
-
-
-
 //postRequest();
 
 // Define the validateAndSubmit function
-function validateAndSubmit() {
-  // Your validation logic here
-  // For demonstration purposes, assume the form is valid
-  let formIsValid =true;
 
-  if (formIsValid) {
-    // Redirect to the confirmation page
 
-    window.location.href = 'confirmation.html?orderId=fd8f7d40-9bfb-11ee-8657-63c8872c941c';
-    const orderId = url.searchParams.get('orderId');
-    return orderId;
-  } else {
-    // Handle invalid form case, show error messages, etc.
-    console.log('Form is not valid. Please check input fields.');
-  }
-}
+
+
+
+

@@ -1,7 +1,7 @@
 
 // Create a link with a URI parameter:
 
-/* CREATE
+
 
 const confirmation = document.getElementsByClassName('confirmation');
 const orderId = document.getElementById('orderId');
@@ -9,6 +9,56 @@ const orderId = document.getElementById('orderId');
 const url = new URL(window.location.href);
 const orderIdText = url.searchParams.get('orderId');
 orderId.innerText = orderIdText;
+
+
+
+
+// confrimation link
+
+
+
+
+//postRequest();
+
+// Define the validateAndSubmit function
+function validateAndSubmit() {
+  // Your validation logic here
+  // For demonstration purposes, assume the form is valid
+  let formIsValid =true;
+
+  if (formIsValid) {
+    // Redirect to the confirmation page
+
+    window.location.href = 'confirmation.html?orderId=fd8f7d40-9bfb-11ee-8657-63c8872c941c';
+    const orderId = url.searchParams.get('orderId');
+    return orderId;
+  } else {
+    // Handle invalid form case, show error messages, etc.
+    console.log('Form is not valid. Please check input fields.');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
